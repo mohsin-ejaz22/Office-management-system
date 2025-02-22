@@ -1,2 +1,2 @@
 # Office-management-system
-# makin frontend and backend folder .
+-make a frontend and backend folder .
