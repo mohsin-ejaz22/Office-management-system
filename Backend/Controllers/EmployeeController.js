@@ -2,24 +2,16 @@ import Employee from "../models/EmployeeModel.js";
 import { ObjectId } from "mongodb";
 import path from "path";
 import fs from "fs/promises";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default {
   async createEmployee(req, res) {
-    try {
+   
       const {
-        employeefirstname,
-        employeelastname,
-        employeegender,
-        employeemobileno,
-        employeeemail,
-        employeerole,
-        employeedepartment,
-        employeedob
-      } = req.body;
+        employeefirstname, employeelastname,employeegender,employeemobileno,employeeemail,employeerole,employeedepartment,employeedob } = req.body;
 
       const employeefile = req.files ? req.files.employeefile : null;
       const employeeimage = req.files ? req.files.employeeimage : null;
@@ -32,7 +24,8 @@ export default {
         ? `uploads/${Date.now()}${path.extname(employeeimage.name)}`
         : null;
 
-      const newEmployee = new Employee({
+        try {
+        const newEmployee = new Employee({
         employeefirstname,
         employeelastname,
         employeegender,
@@ -57,7 +50,7 @@ export default {
       return res.status(201).json(newEmployee);
     } catch (error) {
       if (error.name === "ValidationError") {
-        const errors = Object.values(error.errors).map(err => ({
+        const errors = Object.values(error.errors).map((err) => ({
           msg: err.message,
           path: err.path,
         }));
@@ -121,17 +114,25 @@ export default {
 
       if (employeefile) {
         if (existingEmployee.employeefile) {
-          await fs.unlink(path.join(__dirname, "..", existingEmployee.employeefile));
+          await fs.unlink(
+            path.join(__dirname, "..", existingEmployee.employeefile)
+          );
         }
-        existingEmployee.employeefile = `uploads/${Date.now()}${path.extname(employeefile.name)}`;
+        existingEmployee.employeefile = `uploads/${Date.now()}${path.extname(
+          employeefile.name
+        )}`;
         await employeefile.mv(existingEmployee.employeefile);
       }
 
       if (employeeimage) {
         if (existingEmployee.employeeimage) {
-          await fs.unlink(path.join(__dirname, "..", existingEmployee.employeeimage));
+          await fs.unlink(
+            path.join(__dirname, "..", existingEmployee.employeeimage)
+          );
         }
-        existingEmployee.employeeimage = `uploads/${Date.now()}${path.extname(employeeimage.name)}`;
+        existingEmployee.employeeimage = `uploads/${Date.now()}${path.extname(
+          employeeimage.name
+        )}`;
         await employeeimage.mv(existingEmployee.employeeimage);
       }
 
@@ -151,7 +152,6 @@ export default {
     }
   },
 
-
   async deleteEmployee(req, res) {
     try {
       const employeeId = req.params.id;
@@ -165,11 +165,15 @@ export default {
       }
 
       if (existingEmployee.employeefile) {
-        await fs.unlink(path.join(__dirname, "..", existingEmployee.employeefile));
+        await fs.unlink(
+          path.join(__dirname, "..", existingEmployee.employeefile)
+        );
       }
 
       if (existingEmployee.employeeimage) {
-        await fs.unlink(path.join(__dirname, "..", existingEmployee.employeeimage));
+        await fs.unlink(
+          path.join(__dirname, "..", existingEmployee.employeeimage)
+        );
       }
 
       await Employee.findByIdAndDelete(employeeId);
