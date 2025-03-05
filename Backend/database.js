@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const url = 'mongodb://127.0.0.1:27017/zak&co';
+const url = 'mongodb://127.0.0.1:27017/employee-management-system';
 
 async function connectToDatabase() {
   try {

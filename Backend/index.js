@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const PORT = 4000;
+const PORT =9000;
 const app = express();
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
